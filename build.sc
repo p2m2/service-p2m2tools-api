@@ -10,7 +10,7 @@ object app extends ScalaModule {
         ivy"com.github.p2m2::p2m2tools:0.2.1"
     )
 
-    object test extends Tests{
+    object test extends ScalaTests {
         def testFramework = "utest.runner.Framework"
 
         def ivyDeps = Agg(
