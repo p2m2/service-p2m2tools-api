@@ -1,4 +1,8 @@
 package fr.inrae.metabolomics.p2m2.api
+
+import java.nio.file.{Files, Paths}
+import scala.io.Source
+
 object MetabolomicsData {
   val gcms =
     """
@@ -69,4 +73,8 @@ object MetabolomicsData {
       |=====================================================================
       |                          *** End of Report ***
       |""".stripMargin
+
+  val xcalibur: Array[Byte] = Files.readAllBytes(Paths.get(getClass.getResource("/xcalibur.xls").getPath))
+
+  val masslynx: Array[Byte] = Files.readAllBytes(Paths.get(getClass.getResource("/masslynx.txt").getPath))
 }

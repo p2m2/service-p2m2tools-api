@@ -7,7 +7,7 @@ object app extends ScalaModule {
     def version_build : String = "1.0.0"
     def ivyDeps = Agg(
         ivy"com.lihaoyi::cask:0.9.1",
-        ivy"com.github.p2m2::p2m2tools:0.2.1"
+        ivy"com.github.p2m2::p2m2tools:0.2.2"
     )
 
     object test extends ScalaTests {
