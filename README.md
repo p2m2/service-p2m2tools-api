@@ -6,7 +6,7 @@ API Service to parse the formats of the metabolomics data acquisition devices of
 
 | Path                             | Description                                     | Return values                        | Return values         |
 |:---------------------------------|:------------------------------------------------|:-------------------------------------|:----------------------|
-| /p2m2tools/api/format/sniffer    | returns the file type                           | gcms, openlabcds, masslynx, xcalibur | { format : `value`}   |
+| /p2m2tools/api/format/sniffer    | returns the file type                           | `gcms, openlabcds, masslynx, xcalibur` | { format : `value`}   |
 | /p2m2tools/api/format/parse      | parse a file from a metabolomics analysis by guessing its format | compound                             |     [ { `GenerricP2M2HeaderFile`  : `value` } {} ]                   |
 | /p2m2tools/api/format/parse/gcms | parse a GCMS metabolomics analysis file         | compound list                        | [ { `GenerricP2M2HeaderFile`  : `value` } {} ] |
 | /p2m2tools/api/format/parse/openlabcds    | parse a openlab CDS metabolomics analysis file  | compound list                        | [ { `GenerricP2M2HeaderFile`  : `value` } {} ] |
