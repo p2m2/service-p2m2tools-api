@@ -1,4 +1,4 @@
-# service-parser-p2m2tools
+# service-p2m2tools-api
 
 API Service to parse the formats of the metabolomics data acquisition devices of the P2M2 platform
 
