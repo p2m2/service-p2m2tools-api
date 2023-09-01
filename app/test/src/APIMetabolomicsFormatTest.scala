@@ -52,8 +52,11 @@ object APIMetabolomicsFormatTest extends TestSuite {
     test("gcms") - withServer(APIMetabolomicsFormat) {
       host =>
         val response = requests.post(s"$host/p2m2tools/api/format/parse/gcms", data = MetabolomicsData.gcms)
-        println(response.text())
         assert(response.statusCode == 200)
+        assert(ujson.read(response.text()).isInstanceOf[ujson.Obj])
+        assert(ujson.read(response.text()).asInstanceOf[ujson.Obj].value.keys.nonEmpty)
+        assert(ujson.read(response.text()).asInstanceOf[ujson.Obj].value("class") == ujson.Str("GCMS"))
+        assert(ujson.read(response.text()).asInstanceOf[ujson.Obj].value("format") == ujson.Str("gcms"))
     }
 
 
@@ -75,6 +78,10 @@ object APIMetabolomicsFormatTest extends TestSuite {
       host =>
         val response = requests.post(s"$host/p2m2tools/api/format/parse/openlabcds", data = MetabolomicsData.openlabcds)
         assert(response.statusCode == 200)
+        assert(ujson.read(response.text()).isInstanceOf[ujson.Obj])
+        assert(ujson.read(response.text()).asInstanceOf[ujson.Obj].value.keys.nonEmpty)
+        assert(ujson.read(response.text()).asInstanceOf[ujson.Obj].value("class") == ujson.Str("OpenLabCDS"))
+        assert(ujson.read(response.text()).asInstanceOf[ujson.Obj].value("format") == ujson.Str("openlabcds"))
     }
 
     test("openlabcds/generic") - withServer(APIMetabolomicsFormat) {
@@ -95,7 +102,11 @@ object APIMetabolomicsFormatTest extends TestSuite {
       host =>
         val response = requests.post(s"$host/p2m2tools/api/format/parse/masslynx", data = MetabolomicsData.masslynx)
         assert(response.statusCode == 200)
-        println(response.text())
+        assert(ujson.read(response.text()).isInstanceOf[ujson.Obj])
+        assert(ujson.read(response.text()).asInstanceOf[ujson.Obj].value.keys.nonEmpty)
+        println(ujson.read(response.text()).asInstanceOf[ujson.Obj].value("class")
+          == ujson.Str("QuantifyCompoundSummaryReportMassLynx"))
+        assert(ujson.read(response.text()).asInstanceOf[ujson.Obj].value("format") == ujson.Str("masslynx"))
     }
 
     test("masslynx/generic") - withServer(APIMetabolomicsFormat) {
@@ -116,7 +127,10 @@ object APIMetabolomicsFormatTest extends TestSuite {
       host =>
         val response = requests.post(s"$host/p2m2tools/api/format/parse/xcalibur", data = MetabolomicsData.xcalibur)
         assert(response.statusCode == 200)
-        println(response.text())
+        assert(ujson.read(response.text()).isInstanceOf[ujson.Obj])
+        assert(ujson.read(response.text()).asInstanceOf[ujson.Obj].value.keys.nonEmpty)
+        assert(ujson.read(response.text()).asInstanceOf[ujson.Obj].value("class") == ujson.Str("Xcalibur"))
+        assert(ujson.read(response.text()).asInstanceOf[ujson.Obj].value("format") == ujson.Str("xcalibur"))
     }
 
     test("xcalibur/generic") - withServer(APIMetabolomicsFormat) {

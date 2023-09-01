@@ -53,6 +53,7 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
             case Success(obj : GCMS) =>
                 ujson.Obj(
                     "class" -> "GCMS",
+                    "format" -> "gcms",
                     "origin" -> obj.origin,
                     "header" -> MapValuesToJson(obj.header),
                     "msQuantitativeResults" -> SeqMapValuesToJson(obj.msQuantitativeResults) )
@@ -81,6 +82,7 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
         Try(OpenLabCDSParser.parseByteArray(request.bytes)) match {
             case Success(obj: OpenLabCDS) => ujson.Obj(
                 "class" -> "OpenLabCDS",
+                "format" -> "openlabcds",
                 "origin" -> obj.origin,
                 "header" -> MapValuesToJson(obj.header),
                 "results" -> SeqMapValuesToJson(obj.results)
@@ -110,12 +112,14 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
         Try(QuantifySummaryReportMassLynxParser.parseByteArray(request.bytes)) match {
             case Success(obj: QuantifyCompoundSummaryReportMassLynx) => ujson.Obj(
                 "class" -> "QuantifyCompoundSummaryReportMassLynx",
+                "format" -> "masslynx",
                 "origin" -> obj.origin,
                 "dateStr" -> ujson.Str(obj.header.dateStr.getOrElse("")),
                 "results" -> ujson.Obj.from(obj.resultsByCompound.map{ case (key, v) =>  key -> SeqMapValuesToJson(v)})
             )
             case Success(obj: QuantifySampleSummaryReportMassLynx) => ujson.Obj(
                 "class" -> "QuantifySampleSummaryReportMassLynx",
+                "format" -> "masslynx",
                 "origin" -> obj.origin,
                 "dateStr" -> ujson.Str(obj.header.dateStr.getOrElse("")),
                 "results" -> ujson.Obj.from(obj.resultsBySample.map { case (key, v) => key -> SeqMapValuesToJson(v) })
@@ -159,6 +163,7 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
         Try(XcaliburXlsParser.parseByteArray(request.bytes)) match {
             case Success(obj: Xcalibur) => ujson.Obj(
                 "class" -> "Xcalibur",
+                "format" -> "xcalibur",
                 "origin" -> obj.origin,
                 "results" -> obj.results.map( r => ujson.Obj(
                     "compoundInformationHeader" -> MapValuesToJson(r.compoundInformationHeader),
