@@ -4,14 +4,18 @@ API Service to parse the formats of the metabolomics data acquisition devices of
 
 ## API
 
-| Path                             | Description                                     | Return values                                            | Return values         |
-|:---------------------------------|:------------------------------------------------|:---------------------------------------------------------|:----------------------|
-| /p2m2tools/api/format/sniffer    | returns the file type                           | `gcms, openlabcds, masslynx-txt, masslynx-xml, xcalibur` | { format : `value`}   |
-| /p2m2tools/api/format/parse      | parse a file from a metabolomics analysis by guessing its format | compound                                                 |     [ { `GenerricP2M2HeaderFile`  : `value` } {} ]                   |
-| /p2m2tools/api/format/parse/gcms | parse a GCMS metabolomics analysis file         | compound list                                            | [ { `GenerricP2M2HeaderFile`  : `value` } {} ] |
-| /p2m2tools/api/format/parse/openlabcds    | parse a openlab CDS metabolomics analysis file  | compound list                                            | [ { `GenerricP2M2HeaderFile`  : `value` } {} ] |
-| /p2m2tools/api/format/parse/masslynx    | parse a MassLynx metabolomics analysis file (Quantitative Summary File) | compound list                                            | [ { `GenerricP2M2HeaderFile`  : `value` } {} ] |
-| /p2m2tools/api/format/parse/xcalibur    | parse a Xcalibur metabolomics analysis file     | compound list                                            | [ { `GenerricP2M2HeaderFile`  : `value` } {} ] |
+| Path                                           | Description                                                                     | Return values                                            | Return values                                   |
+|:-----------------------------------------------|:--------------------------------------------------------------------------------|:---------------------------------------------------------|:------------------------------------------------|
+| /p2m2tools/api/format/sniffer                  | returns the file type                                                           | `gcms, openlabcds, masslynx-txt, masslynx-xml, xcalibur` | { format : `value`}                             |
+| /p2m2tools/api/format/parse                    | parse a file from a metabolomics analysis by guessing its format                | compound                                                 | [ { `GenerricP2M2HeaderFile`  : `value` } {} ]  |
+| /p2m2tools/api/format/parse/gcms               | parse a GCMS metabolomics analysis file                                         | compound list                                            |                                                 |
+| /p2m2tools/api/format/parse/gcms/generic       | parse a GCMS metabolomics analysis file. Convert to Generic format P2M2         | header, format, class, compound list                     | [ { `GenerricP2M2HeaderFile`  : `value` } {} ]  |
+| /p2m2tools/api/format/parse/openlabcds         | parse a openlab CDS metabolomics analysis file                                  | compound list                                            |                                                 |
+| /p2m2tools/api/format/parse/openlabcds/generic | parse a openlab CDS metabolomics analysis file. Convert to Generic format P2M2  | header, format, class, compound list                     | [ { `GenerricP2M2HeaderFile`  : `value` } {} ]  |
+| /p2m2tools/api/format/parse/masslynx           | parse a MassLynx metabolomics analysis file (Quantitative Summary File)         | compound list                                            |                                                 |
+| /p2m2tools/api/format/parse/masslynx/generic   | parse a MassLynx metabolomics analysis file. Convert to Generic format P2M2     | header, format, class, compound list                     | [ { `GenerricP2M2HeaderFile`  : `value` } {} ]  |
+| /p2m2tools/api/format/parse/xcalibur           | parse a Xcalibur metabolomics analysis file                                     | compound list                                            |                                                 |
+| /p2m2tools/api/format/parse/xcalibur/generic   | parse a Xcalibur metabolomics analysis file. Convert to Generic format P2M2     | header, format, class, compound list                     | [ { `GenerricP2M2HeaderFile`  : `value` } {} ]  |
 
 
 To see the possible values of GenerricP2M2HeaderFile :
@@ -48,7 +52,7 @@ or with mill
 ./mill -w app.runBackground
 ```
 
-## Curl example
+## Curl examples
 
 ### With String content
 
@@ -68,6 +72,36 @@ ID#	Name	Type	ISTD Group#	Mass	Ret.Time	Start Time	End Time	A/H	Area	Height	Conc
 
 ```bash
 curl -X POST http://localhost:8080/p2m2tools/api/format/sniffer --data-binary @app/test/resources/xcalibur.xls 
+```
+
+## Javascript examples
+
+```bash
+node example-requests-file.js
+```
+
+```javascript
+var fs = require('fs');
+
+/*
+    Example 1 - Obtain the information contained in the file in Xcalibur format
+*/
+
+(async() => {
+
+    var contentFile = fs.readFileSync('app/test/resources/xcalibur.xls')
+    var response = await fetch('http://localhost:8080/p2m2tools/api/format/parse/xcalibur', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: contentFile
+    })
+
+    const data = await response.json();
+    console.log(data);
+
+})();
 ```
 
 ## devel / memo

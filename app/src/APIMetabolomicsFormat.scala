@@ -56,7 +56,9 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
                     "format" -> "gcms",
                     "origin" -> obj.origin,
                     "header" -> MapValuesToJson(obj.header),
-                    "msQuantitativeResults" -> SeqMapValuesToJson(obj.msQuantitativeResults) )
+                    "msQuantitativeResults" -> SeqMapValuesToJson(obj.msQuantitativeResults),
+                    "request" -> ujson.Obj("size:"->request.bytes.length)
+                )
             case Failure(e) =>
                 System.err.println(e.toString);
                 cask.Abort(401);ujson.Obj("error" -> e.toString)
@@ -85,7 +87,8 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
                 "format" -> "openlabcds",
                 "origin" -> obj.origin,
                 "header" -> MapValuesToJson(obj.header),
-                "results" -> SeqMapValuesToJson(obj.results)
+                "results" -> SeqMapValuesToJson(obj.results),
+                "request" -> ujson.Obj("size:"->request.bytes.length)
             )
             case Failure(e) => System.err.println(e.toString); cask.Abort(401); ujson.Obj("error" -> e.toString)
         }
@@ -115,16 +118,19 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
                 "format" -> "masslynx",
                 "origin" -> obj.origin,
                 "dateStr" -> ujson.Str(obj.header.dateStr.getOrElse("")),
-                "results" -> ujson.Obj.from(obj.resultsByCompound.map{ case (key, v) =>  key -> SeqMapValuesToJson(v)})
+                "results" -> ujson.Obj.from(obj.resultsByCompound.map{ case (key, v) =>  key -> SeqMapValuesToJson(v)}),
+                "request" -> ujson.Obj("size:"->request.bytes.length)
+
             )
             case Success(obj: QuantifySampleSummaryReportMassLynx) => ujson.Obj(
                 "class" -> "QuantifySampleSummaryReportMassLynx",
                 "format" -> "masslynx",
                 "origin" -> obj.origin,
                 "dateStr" -> ujson.Str(obj.header.dateStr.getOrElse("")),
-                "results" -> ujson.Obj.from(obj.resultsBySample.map { case (key, v) => key -> SeqMapValuesToJson(v) })
+                "results" -> ujson.Obj.from(obj.resultsBySample.map { case (key, v) => key -> SeqMapValuesToJson(v) }),
+                "request" -> ujson.Obj("size:"->request.bytes.length)
             )
-            case Success(obj) => ujson.Obj( "obj" -> ujson.Str(obj.toString) )
+            case Success(obj) => ujson.Obj( "error" -> obj.toString )
             case Failure(e) =>
                 cask.Abort(401);
                 ujson.Obj("error" -> e.toString)
@@ -168,7 +174,8 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
                 "results" -> obj.results.map( r => ujson.Obj(
                     "compoundInformationHeader" -> MapValuesToJson(r.compoundInformationHeader),
                     "compoundByInjection" -> SeqMapValuesToJson(r.compoundByInjection)
-                ))
+                )),
+                "request" -> ujson.Obj("size:"->request.bytes.length)
             )
             case Failure(e) => System.err.println(e.toString); cask.Abort(401); ujson.Obj("error" -> e.toString)
         }
