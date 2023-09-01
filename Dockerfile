@@ -4,7 +4,7 @@ LABEL author="Olivier Filangi"
 LABEL mail="olivier.filangi@inrae.fr"
 ENV MILL_VERSION="0.11.2"
 
-COPY .
+COPY . /service-p2m2tools-api/
 WORKDIR /service-p2m2tools-api/
 RUN curl -L https://github.com/com-lihaoyi/mill/releases/download/${MILL_VERSION}/${MILL_VERSION} > mill &&\
     chmod +x mill &&\
