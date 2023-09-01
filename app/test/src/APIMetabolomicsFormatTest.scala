@@ -49,9 +49,17 @@ object APIMetabolomicsFormatTest extends TestSuite {
         assert(ujson.read(response.text()) == ujson.Obj("format" -> "unknown"))
     }
 
-    test("gcms") - withServer(APIMetabolomicsFormat){
+    test("gcms") - withServer(APIMetabolomicsFormat) {
       host =>
-        val response = requests.post(s"$host/p2m2tools/api/format/parse/gcms",data=MetabolomicsData.gcms)
+        val response = requests.post(s"$host/p2m2tools/api/format/parse/gcms", data = MetabolomicsData.gcms)
+        println(response.text())
+        assert(response.statusCode == 200)
+    }
+
+
+    test("gcms/generic") - withServer(APIMetabolomicsFormat){
+      host =>
+        val response = requests.post(s"$host/p2m2tools/api/format/parse/gcms/generic",data=MetabolomicsData.gcms)
         assert(response.statusCode == 200)
         assert(ujson.read(response.text()).arr.length == 1)
     }
@@ -67,6 +75,12 @@ object APIMetabolomicsFormatTest extends TestSuite {
       host =>
         val response = requests.post(s"$host/p2m2tools/api/format/parse/openlabcds", data = MetabolomicsData.openlabcds)
         assert(response.statusCode == 200)
+    }
+
+    test("openlabcds/generic") - withServer(APIMetabolomicsFormat) {
+      host =>
+        val response = requests.post(s"$host/p2m2tools/api/format/parse/openlabcds/generic", data = MetabolomicsData.openlabcds)
+        assert(response.statusCode == 200)
         assert(ujson.read(response.text()).arr.length == 4)
     }
 
@@ -81,6 +95,13 @@ object APIMetabolomicsFormatTest extends TestSuite {
       host =>
         val response = requests.post(s"$host/p2m2tools/api/format/parse/masslynx", data = MetabolomicsData.masslynx)
         assert(response.statusCode == 200)
+        println(response.text())
+    }
+
+    test("masslynx/generic") - withServer(APIMetabolomicsFormat) {
+      host =>
+        val response = requests.post(s"$host/p2m2tools/api/format/parse/masslynx/generic", data = MetabolomicsData.masslynx)
+        assert(response.statusCode == 200)
         assert(ujson.read(response.text()).arr.length == 8313)
     }
 
@@ -94,6 +115,13 @@ object APIMetabolomicsFormatTest extends TestSuite {
     test("xcalibur") - withServer(APIMetabolomicsFormat) {
       host =>
         val response = requests.post(s"$host/p2m2tools/api/format/parse/xcalibur", data = MetabolomicsData.xcalibur)
+        assert(response.statusCode == 200)
+        println(response.text())
+    }
+
+    test("xcalibur/generic") - withServer(APIMetabolomicsFormat) {
+      host =>
+        val response = requests.post(s"$host/p2m2tools/api/format/parse/xcalibur/generic", data = MetabolomicsData.xcalibur)
         assert(response.statusCode == 200)
         assert(ujson.read(response.text()).arr.length == 468)
     }
