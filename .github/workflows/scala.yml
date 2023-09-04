@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: jodersky/setup-mill@master
       with:
-        mill-version: 0.10.4
+        mill-version: 0.11.2
     - name: Check out repository code
       uses: actions/checkout@v3
     - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
