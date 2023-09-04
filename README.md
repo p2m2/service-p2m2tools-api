@@ -44,10 +44,21 @@ curl -L https://github.com/com-lihaoyi/mill/releases/download/0.11.2/0.11.2 > mi
 
 ## run service
 
+### docker
+
+```bash
+docker pull inraep2m2/service-p2m2tools-api:devel
+docker run -d -p 8080:8080 -t inraep2m2/service-p2m2tools-api:devel
+```
+
+### jar
+
 ```bash
 ./mill app.assembly
 java -jar ./out/app/assembly.dest/out.jar
 ```
+
+### mill
 
 or with mill 
 ```bash

@@ -2,6 +2,7 @@ package fr.inrae.metabolomics.p2m2.api
 
 import cask.decorators.compress
 import cask.main.Main
+import io.undertow.Undertow
 import fr.inrae.metabolomics.p2m2.format.XMLQuantitativeDataProcessingMassLynx
 import fr.inrae.metabolomics.p2m2.format.ms.{GCMS, GenericP2M2, MassSpectrometryResultSet, OpenLabCDS, QuantifyCompoundSummaryReportMassLynx, QuantifySampleSummaryReportMassLynx, QuantifySummaryReportMassLynx, Xcalibur}
 import fr.inrae.metabolomics.p2m2.parser.{GCMSParser, OpenLabCDSParser, ParserManager, ParserUtils, QuantifySummaryReportMassLynxParser, QuantitativeDataProcessingMassLynxParser, XcaliburXlsParser}
@@ -13,6 +14,9 @@ import scala.util.{Failure, Success, Try}
 object APIMetabolomicsFormat extends cask.MainRoutes {
     private val logger = LoggerFactory.getLogger(APIMetabolomicsFormat.getClass)
     override def decorators: Seq[compress] = Seq(new cask.decorators.compress())
+    
+    override def port: Int = 8080
+    override def host: String = "0.0.0.0"
 
     //@cask.decorators.compress
     @cask.post("/p2m2tools/api/format/sniffer")

@@ -4,10 +4,13 @@ LABEL author="Olivier Filangi"
 LABEL mail="olivier.filangi@inrae.fr"
 ENV MILL_VERSION="0.11.2"
 
+EXPOSE 8080
+
 COPY . /service-p2m2tools-api/
 WORKDIR /service-p2m2tools-api/
 RUN curl -L https://github.com/com-lihaoyi/mill/releases/download/${MILL_VERSION}/${MILL_VERSION} > mill &&\
     chmod +x mill &&\
-    ./mill app.test # first time download and build every thing !
+    ./mill app.test &&\
+    ./mill app.assembly
 
-CMD ["./mill","-w","app.runBackground"]
+CMD ["java","-jar","./out/app/assembly.dest/out.jar"]
