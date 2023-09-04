@@ -1,6 +1,6 @@
 # service-p2m2tools-api
 
-![Tests](https://github.com/p2m2/service-p2m2tools-api/actions/workflows/scala.yml/badge.svg)
+![Scala CI](https://github.com/p2m2/service-p2m2tools-api/actions/workflows/scala.yml/badge.svg)
 
 API Service to parse the formats of the metabolomics data acquisition devices of the P2M2 platform
 
