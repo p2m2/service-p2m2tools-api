@@ -1,7 +1,8 @@
 # service-p2m2tools-api
 
-![Scala CI](https://github.com/p2m2/service-p2m2tools-api/actions/workflows/scala.yml/badge.svg)
-![Docker image](https://github.com/p2m2/service-p2m2tools-api/actions/workflows/dockerhub.yml/badge.svg)
+![Scala CI badge](https://github.com/p2m2/service-p2m2tools-api/actions/workflows/scala.yml/badge.svg)
+![Docker image badge](https://github.com/p2m2/service-p2m2tools-api/actions/workflows/dockerhub.yml/badge.svg)
+
 
 API Service to parse the formats of the metabolomics data acquisition devices of the P2M2 platform
 
