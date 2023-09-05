@@ -17,24 +17,43 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+      
       - uses: jodersky/setup-mill@master
         with:
           mill-version: 0.11.2
+
       - name: Build Cobertura / Mill / SCoverage
         run: |
           mill app.scoverage.compile
           mill app.test
           mill app.scoverage.xmlReport
 
-      - name: Code Coverage Report
-        uses: codecov/codecov-action@v3
+      - name: Code Coverage Report Action
+        uses: insightsengineering/coverage-action@v2.2.0
+            
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./out/app/scoverage/xmlReport.dest/scoverage.xml
-          flags: unittests # optional
-          name: codecov-umbrella # optional
-          fail_ci_if_error: true # optional (default = false)
-          verbose: true # optional (default = false)
+          # Path to the Cobertura XML report.
+          path: ./out/app/scoverage/xmlReport.dest/scoverage.xml
+          # Minimum total coverage, if you want to the
+          # workflow to enforce it as a standard.
+          # This has no effect if the `fail` arg is set to `false`.
+          threshold: 80.123
+          # Fail the workflow if the minimum code coverage
+          # reuqirements are not satisfied.
+          fail: true
+          # Publish the rendered output as a PR comment
+          publish: true
+          # Create a coverage diff report.
+          diff: true
+          # Branch to diff against.
+          # Compare the current coverage to the coverage
+          # determined on this branch.
+          diff-branch: main
+          # This is where the coverage reports for the
+          # `diff-branch` are stored.
+          # Branch is created if it doesn't already exist'.
+          diff-storage: _xml_coverage_reports
+      
       - name: Add Coverage PR Comment
         uses: marocchino/sticky-pull-request-comment@v2
         if: github.event_name == 'pull_request'
