@@ -1,0 +1,43 @@
+---
+name: Code Coverage
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  coverage:
+    name: Calculate code coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - uses: jodersky/setup-mill@master
+        with:
+          mill-version: 0.11.2
+      - name: Build Cobertura / Mill / SCoverage
+        run: |
+          mill app.scoverage.compile
+          mill app.test
+          mill app.scoverage.xmlReport
+
+      - name: Code Coverage Report
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./out/app/scoverage/xmlReport.dest/scoverage.xm
+          flags: unittests # optional
+          name: codecov-umbrella # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true # optional (default = false)
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md
