@@ -3,6 +3,7 @@ package fr.inrae.metabolomics.p2m2.api
 import cask.decorators.compress
 import cask.main.Main
 import io.undertow.Undertow
+import io.undertow.server.handlers.BlockingHandler
 import fr.inrae.metabolomics.p2m2.format.XMLQuantitativeDataProcessingMassLynx
 import fr.inrae.metabolomics.p2m2.format.ms.{GCMS, GenericP2M2, MassSpectrometryResultSet, OpenLabCDS, QuantifyCompoundSummaryReportMassLynx, QuantifySampleSummaryReportMassLynx, QuantifySummaryReportMassLynx, Xcalibur}
 import fr.inrae.metabolomics.p2m2.parser.{GCMSParser, OpenLabCDSParser, ParserManager, ParserUtils, QuantifySummaryReportMassLynxParser, QuantitativeDataProcessingMassLynxParser, XcaliburXlsParser}
@@ -15,8 +16,53 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
     private val logger = LoggerFactory.getLogger(APIMetabolomicsFormat.getClass)
     override def decorators: Seq[compress] = Seq(new cask.decorators.compress())
     
+    var _server : Option[Undertow] = None
+
+    override def defaultHandler: BlockingHandler =
+        new BlockingHandler( CorsHandler(dispatchTrie,
+        mainDecorators,
+        debugMode = false,
+        handleNotFound,
+        handleMethodNotAllowed,
+        handleEndpointError) )
+
     override def port: Int = 8080
     override def host: String = "0.0.0.0"
+
+    override def main(args: Array[String]) : Unit = {
+        logger.info(s"PORT:${port}")
+        logger.info(s"HOST:${host}")
+        
+        val server: Undertow = Undertow.builder
+          .addHttpListener(port, host)
+          .setHandler(defaultHandler)
+          .build
+
+        _server = Some(server)
+        server.start()
+
+        logger.info(s" == start service ${this.getClass.getSimpleName} == ")
+        @volatile var keepRunning = true
+
+        Runtime.getRuntime().addShutdownHook(new Thread {
+          override def run = {
+            println("* catch signal / stop service *")
+            server.stop()
+            keepRunning = false
+          }
+        })
+
+        //if (config.background) while (keepRunning) {}
+       
+    }
+
+    def closeService() : Unit =  {
+        _server match {
+        case Some(s) => s.stop()
+        case _ =>
+        }
+        this.executionContext.shutdown()
+    }
 
     //@cask.decorators.compress
     @cask.post("/p2m2tools/api/format/sniffer")

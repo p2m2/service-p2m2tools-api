@@ -4,7 +4,7 @@ import java.io.File
 
 object app extends ScalaModule {
     def scalaVersion = "2.13.11"
-    def version_build : String = "1.0.0"
+    def version_build : String = "1.0.1"
     def ivyDeps = Agg(
         ivy"com.lihaoyi::cask:0.9.1",
         ivy"com.github.p2m2::p2m2tools:0.2.2",
