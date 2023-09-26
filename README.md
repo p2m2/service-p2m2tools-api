@@ -48,8 +48,8 @@ curl -L https://github.com/com-lihaoyi/mill/releases/download/0.11.2/0.11.2 > mi
 ### docker
 
 ```bash
-docker pull inraep2m2/service-p2m2tools-api:devel
-docker run -d -p 8080:8080 -t inraep2m2/service-p2m2tools-api:devel
+docker pull inraep2m2/service-p2m2tools-api:latest
+docker run -d -p 8080:8080 -t inraep2m2/service-p2m2tools-api:latest
 ```
 
 ### jar
@@ -73,7 +73,7 @@ or with mill
 ```bash
 curl -X POST http://localhost:8080/p2m2tools/api/format/sniffer --data-raw '
 [Header]
-Data File Name	C:\Users\ydellero\Desktop\Projets CR\P2M2\TQD\210510_13C_Younes\13CPROT2.qgd
+Data File Name	C:\Users\X\Desktop\Projets CR\P2M2\TQD\210510_13C\13CPROT2.qgd
 Output Date	23/08/2021
 Output Time	14:09:36
 
