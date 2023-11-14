@@ -1,11 +1,9 @@
 package fr.inrae.metabolomics.p2m2.api
 
 import cask.decorators.compress
-import cask.main.Main
 import io.undertow.Undertow
 import io.undertow.server.handlers.BlockingHandler
-import fr.inrae.metabolomics.p2m2.format.XMLQuantitativeDataProcessingMassLynx
-import fr.inrae.metabolomics.p2m2.format.ms.{GCMS, GenericP2M2, MassSpectrometryResultSet, OpenLabCDS, QuantifyCompoundSummaryReportMassLynx, QuantifySampleSummaryReportMassLynx, QuantifySummaryReportMassLynx, Xcalibur}
+import fr.inrae.metabolomics.p2m2.format.ms.{GCMS, MassSpectrometryResultSet, OpenLabCDS, QuantifyCompoundSummaryReportMassLynx, QuantifySampleSummaryReportMassLynx, QuantifySummaryReportMassLynx, Xcalibur}
 import fr.inrae.metabolomics.p2m2.parser.{GCMSParser, OpenLabCDSParser, ParserManager, ParserUtils, QuantifySummaryReportMassLynxParser, QuantitativeDataProcessingMassLynxParser, XcaliburXlsParser}
 import org.slf4j.LoggerFactory
 import upickle.default._
@@ -110,8 +108,8 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
                     "request" -> ujson.Obj("size:"->request.bytes.length)
                 )
             case Failure(e) =>
-                System.err.println(e.toString);
-                cask.Abort(401);ujson.Obj("error" -> e.toString)
+                System.err.println(e.getMessage);
+                cask.Abort(401);ujson.Obj("error" -> e.getMessage)
         }
     }
 
@@ -119,7 +117,7 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
     def gcmsToGenericP2M2(request: cask.Request): ujson.Value = {
         Try(GCMSParser.parseByteArray(request.bytes)) match {
             case Success(obj: MassSpectrometryResultSet) => SeqMapValuesToJson(obj.toGenericP2M2.samples)
-            case Failure(e) => System.err.println(e.toString); cask.Abort(401); ujson.Obj("error" -> e.toString)
+            case Failure(e) => System.err.println(e.getMessage); cask.Abort(401); ujson.Obj("error" -> e.getMessage)
         }
     }
 
@@ -140,7 +138,7 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
                 "results" -> SeqMapValuesToJson(obj.results),
                 "request" -> ujson.Obj("size:"->request.bytes.length)
             )
-            case Failure(e) => System.err.println(e.toString); cask.Abort(401); ujson.Obj("error" -> e.toString)
+            case Failure(e) => System.err.println(e.getMessage); cask.Abort(401); ujson.Obj("error" -> e.getMessage)
         }
     }
 
@@ -148,7 +146,7 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
     def openlabcdsToGenericP2M2(request: cask.Request) : ujson.Value = {
         Try(OpenLabCDSParser.parseByteArray(request.bytes)) match {
             case Success(obj: MassSpectrometryResultSet) => SeqMapValuesToJson(obj.toGenericP2M2.samples)
-            case Failure(e) => System.err.println(e.toString); cask.Abort(401); ujson.Obj("error" -> e.toString)
+            case Failure(e) => System.err.println(e.getMessage); cask.Abort(401); ujson.Obj("error" -> e.getMessage)
         }
     }
 
@@ -183,7 +181,7 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
             case Success(obj) => ujson.Obj( "error" -> obj.toString )
             case Failure(e) =>
                 cask.Abort(401);
-                ujson.Obj("error" -> e.toString)
+                ujson.Obj("error" -> e.getMessage)
         }
     }
 
@@ -193,7 +191,7 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
             case Success(obj: MassSpectrometryResultSet) => SeqMapValuesToJson(obj.toGenericP2M2.samples)
             case Failure(e) =>
                 cask.Abort(401);
-                ujson.Obj("error" -> e.toString)
+                ujson.Obj("error" -> e.getMessage)
         }
     }
 /*
@@ -203,7 +201,7 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
             case Success(obj: XMLQuantitativeDataProcessingMassLynx) => SeqMapValuesToJson(obj.toGenericP2M2)
             case Failure(e) =>
                 cask.Abort(401);
-                ujson.Obj("error" -> e.toString)
+                ujson.Obj("error" -> e.getMessage)
         }
     }
 */
@@ -227,7 +225,7 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
                 )),
                 "request" -> ujson.Obj("size:"->request.bytes.length)
             )
-            case Failure(e) => System.err.println(e.toString); cask.Abort(401); ujson.Obj("error" -> e.toString)
+            case Failure(e) => System.err.println(e.getMessage); cask.Abort(401); ujson.Obj("error" -> e.getMessage)
         }
     }
 
@@ -235,7 +233,7 @@ object APIMetabolomicsFormat extends cask.MainRoutes {
     def xcaliburToGenericP2M2(request: cask.Request): ujson.Value = {
         Try(XcaliburXlsParser.parseByteArray(request.bytes)) match {
             case Success(obj: MassSpectrometryResultSet) => SeqMapValuesToJson(obj.toGenericP2M2.samples)
-            case Failure(e) => System.err.println(e.toString); cask.Abort(401); ujson.Obj("error" -> e.toString)
+            case Failure(e) => System.err.println(e.getMessage); cask.Abort(401); ujson.Obj("error" -> e.getMessage)
         }
     }
 
