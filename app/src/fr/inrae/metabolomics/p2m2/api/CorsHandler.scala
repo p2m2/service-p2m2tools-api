@@ -8,15 +8,14 @@ import cask.router.EndpointMetadata
 import cask.router.Decorator
 import cask.model.Response
 import cask.router.Result
-
 import io.undertow.Undertow
 import io.undertow.server.HttpServerExchange
 import io.undertow.server.handlers.BlockingHandler
 import io.undertow.util.Headers
 import io.undertow.util.HttpString
 
+import java.util
 import java.util.concurrent.TimeUnit
-
 import scala.concurrent.duration._
 import scala.io.StdIn
 import scala.jdk.CollectionConverters._
@@ -29,8 +28,8 @@ object CorsHandler {
 
   val origin = "*"
   val accepted = "true"
-  val headers = Set("Authorization", "Content-Type", "X-Requested-With").asJava
-  val methods = Set("POST", "GET", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS").asJava
+  val headers: util.Set[String] = Set("Authorization", "Content-Type", "X-Requested-With").asJava
+  val methods: util.Set[String] = Set("POST", "GET", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS").asJava
 }
 
 case class CorsHandler(dispatchTrie: DispatchTrie[Map[String, (Routes, EndpointMetadata[_])]],
