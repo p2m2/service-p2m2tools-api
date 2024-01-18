@@ -7,7 +7,7 @@ object app extends ScalaModule {
     def version_build : String = "1.0.1"
     def ivyDeps = Agg(
         ivy"com.lihaoyi::cask:0.9.1",
-        ivy"com.github.p2m2::p2m2tools:0.2.2",
+        ivy"com.github.p2m2::p2m2tools:0.2.3c",
         ivy"org.apache.logging.log4j:log4j-to-slf4j:2.20.0",
         ivy"org.slf4j:slf4j-api:2.0.7",
         ivy"org.slf4j:slf4j-simple:2.0.7"
