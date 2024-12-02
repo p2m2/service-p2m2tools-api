@@ -21,14 +21,15 @@ jobs:
     - uses: actions/checkout@v4
       name: Checkout repository
     - name: set lower case owner name
+      id: set_owner_lc
       run: |
-        echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+        echo "OWNER_LC=${OWNER,,}" >> "$GITHUB_OUTPUT"
       env:
         OWNER: '${{ github.repository_owner }}'
     - name: Build and publish Docker image with multiple tags
       uses: VaultVulp/gp-docker-action@1.6.0
       env:
-        OWNER: ${{ OWNER_LC }}
+        OWNER: ${{ steps.set_owner_lc.outputs.OWNER_LC }}
       with:
         github-token: ${{secrets.MY_TOKEN}} # Provide GITHUB_TOKEN to login into the GitHub Packages
         image-name: service-p2m2tools-api # Provide Docker image name
