@@ -31,7 +31,7 @@ jobs:
         OWNER: ${{ OWNER_LC }}
       with:
         github-token: ${{secrets.MY_TOKEN}} # Provide GITHUB_TOKEN to login into the GitHub Packages
-        image-name: scala-sbt # Provide Docker image name
+        image-name: service-p2m2tools-api # Provide Docker image name
         additional-image-tags: 1.7.1 # two additional tags for an image
         dockerfile: DockerfileQuay # Provide Dockerfile path
         custom-args: --build-arg=TEAM=${{ env.OWNER }} # Provide custom arguments for the Docker build
