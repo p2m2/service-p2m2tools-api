@@ -20,10 +20,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       name: Checkout repository
+    - name: set lower case owner name
+      run: |
+        echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+      env:
+        OWNER: '${{ github.repository_owner }}'
     - name: Build and publish Docker image with multiple tags
       uses: VaultVulp/gp-docker-action@1.6.0
       env:
-        OWNER: ${{github.repository_owner}}
+        OWNER: ${{ OWNER_LC }}
       with:
         github-token: ${{secrets.MY_TOKEN}} # Provide GITHUB_TOKEN to login into the GitHub Packages
         image-name: scala-sbt # Provide Docker image name
