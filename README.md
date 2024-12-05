@@ -18,9 +18,10 @@ API Service to parse the formats of the metabolomics data acquisition devices of
 
 ## prerequisites
 
-``` 
+``` bash
 curl -L https://github.com/com-lihaoyi/mill/releases/download/0.11.2/0.11.2 > mill && chmod +x mill
 ```
+
 ## run tests
 
 ```bash
@@ -36,6 +37,15 @@ docker pull inraep2m2/service-p2m2tools-api:latest
 docker run -d -p 8080:8080 -t inraep2m2/service-p2m2tools-api:latest
 ```
 
+OR
+
+```bash
+docker pull ghcr.io/<repository-user>/service-p2m2tools-api:latest
+docker run -d -p 8080:8080 -t ghcr.io/<repository-user>/service-p2m2tools-api:latest
+```
+
+Replace `<repository-user>` with your github username
+
 ### jar
 
 ```bash
@@ -45,7 +55,8 @@ java -jar ./out/app/assembly.dest/out.jar
 
 ### mill
 
-or with mill 
+or with mill
+
 ```bash
 ./mill -w app.runBackground
 ```
@@ -66,6 +77,7 @@ ID#	Name	Type	ISTD Group#	Mass	Ret.Time	Start Time	End Time	A/H	Area	Height	Conc
 1	Glyoxylate (1MEOX) (1TMS )m0	Target	1	160.00	6.405	6.393	6.423	1.080	14	13	0.00029	Auto	3	6.400	Default	0	0	0	0	0	0	84.50	0.00	0.00	18	73.00	0	0	84.50	0.00	59.00	142	129	49.59	1014.29	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1218	4.87	mg/L		0.00000
 '
 ```
+
 ### With file
 
 ```bash
@@ -104,8 +116,8 @@ var fs = require('fs');
 
 ## devel / memo
 
-
 ### setting up IntelliJ IDEA
+
 ```bash
 ./mill -j 0 mill.idea.GenIdea/idea
 ```
