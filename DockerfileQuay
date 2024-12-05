@@ -5,7 +5,7 @@
 
 ARG TEAM
 
-FROM ghcr.io/${TEAM}/scala-sbt/scala-sbt:latest
+FROM ghcr.io/${TEAM}/scala-sbt:latest
 
 LABEL author="Olivier Filangi"
 LABEL maintainer="Marcellino Palerme <marcellino.palerme@inrae.fr>"
