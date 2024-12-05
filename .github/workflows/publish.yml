@@ -1,0 +1,49 @@
+# © 2024 INRAE
+# SPDX-FileContributor: Marcellino Palerme <marcellino.palerme@inrae.fr>
+#
+# SPDX-License-Identifier: MIT
+
+name: publish
+
+on:
+  pull_request:
+    branches: 'main'
+
+permissions: 
+  contents: write
+  pull-requests: write
+  checks: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v4
+      name: Checkout repository
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.MY_TOKEN }}
+
+    - name: set lower case owner name
+      id: set_owner_lc
+      env:
+        OWNER: '${{ github.repository_owner }}'
+      run: |
+        echo "OWNER_LC=${OWNER,,}" >> "$GITHUB_OUTPUT"
+        
+    - name: Build Docker image
+      env:
+        OWNER: ${{ steps.set_owner_lc.outputs.OWNER_LC }}
+      run: |
+        docker build -f DockerfileQuay -t ghcr.io/${{ env.OWNER }}/service-p2m2tools-api:latest -t ghcr.io/${{ env.OWNER }}/service-p2m2tools-api:1.1.0 --build-arg TEAM=${{ env.OWNER }} .
+
+    - name: Push Docker image
+      env:
+        OWNER: ${{ steps.set_owner_lc.outputs.OWNER_LC }}
+      run: |
+        docker push -a ghcr.io/${{ env.OWNER }}/service-p2m2tools-api
