@@ -18,21 +18,32 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
+
     - uses: actions/checkout@v4
       name: Checkout repository
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.MY_TOKEN }}
+
     - name: set lower case owner name
       id: set_owner_lc
-      run: |
-        echo "OWNER_LC=${OWNER,,}" >> "$GITHUB_OUTPUT"
       env:
         OWNER: '${{ github.repository_owner }}'
-    - name: Build and publish Docker image with multiple tags
-      uses: VaultVulp/gp-docker-action@1.6.0
+      run: |
+        echo "OWNER_LC=${OWNER,,}" >> "$GITHUB_OUTPUT"
+        
+    - name: Build Docker image
       env:
         OWNER: ${{ steps.set_owner_lc.outputs.OWNER_LC }}
-      with:
-        github-token: ${{secrets.MY_TOKEN}} # Provide GITHUB_TOKEN to login into the GitHub Packages
-        image-name: service-p2m2tools-api # Provide Docker image name
-        additional-image-tags: 1.7.1 # two additional tags for an image
-        dockerfile: DockerfileQuay # Provide Dockerfile path
-        custom-args: --build-arg=TEAM=${{ env.OWNER }} # Provide custom arguments for the Docker build
+      run: |
+        docker build -f DockerfileQuay -t ghcr.io/${{ env.OWNER }}/service-p2m2tools-api:latest -t ghcr.io/${{ env.OWNER }}/service-p2m2tools-api:1.1.0 -e TEAM=${{ env.OWNER }} .
+
+    - name: Push Docker image
+      env:
+        OWNER: ${{ steps.set_owner_lc.outputs.OWNER_LC }}
+      run: |
+        docker push -a ghcr.io/${{ env.OWNER }}/service-p2m2tools-api
