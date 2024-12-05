@@ -40,7 +40,7 @@ jobs:
       env:
         OWNER: ${{ steps.set_owner_lc.outputs.OWNER_LC }}
       run: |
-        docker build -f DockerfileQuay -t ghcr.io/${{ env.OWNER }}/service-p2m2tools-api:latest -t ghcr.io/${{ env.OWNER }}/service-p2m2tools-api:1.1.0 -e TEAM=${{ env.OWNER }} .
+        docker build -f DockerfileQuay -t ghcr.io/${{ env.OWNER }}/service-p2m2tools-api:latest -t ghcr.io/${{ env.OWNER }}/service-p2m2tools-api:1.1.0 --build-arg TEAM=${{ env.OWNER }} .
 
     - name: Push Docker image
       env:
